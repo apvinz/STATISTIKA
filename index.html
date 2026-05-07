@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Statistik Data Kelompok</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 650px;
+    margin: auto;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+button {
+    background: #1e40af;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1e3a8a;
+}
+
+#hasil {
+    margin-top: 20px;
+    white-space: pre-line;
+    background: #f9fafb;
+    padding: 10px;
+    border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>📊 Statistik Data Kelompok</h2>
+
+<label>Interval Kelas</label>
+<input id="interval" type="text" placeholder="10-19,20-29,30-39">
+
+<label>Frekuensi</label>
+<input id="frekuensi" type="text" placeholder="2,8,12,7,3">
+
+<label>Pilih Perhitungan</label>
+<select id="pilihan">
+    <option value="1">Mean</option>
+    <option value="2">Median</option>
+    <option value="3">Modus</option>
+    <option value="4">Kuartil Bawah (Q1)</option>
+    <option value="5">Kuartil Atas (Q3)</option>
+</select>
+
+<button onclick="hitung()">Hitung</button>
+<button onclick="ulang()">Pilih Ulang</button>
+
+<div id="hasil"></div>
+</div>
+
+<script>
+function hitung() {
+
+    let interval = document.getElementById("interval").value.split(",");
+    let freq = document.getElementById("frekuensi").value.split(",").map(Number);
+    let pilihan = document.getElementById("pilihan").value;
+
+    let kelas = [];
+
+    for (let i = 0; i < interval.length; i++) {
+        let [a, b] = interval[i].split("-").map(Number);
+        kelas.push([a, b]);
+    }
+
+    let n = kelas.length;
+    let total_f = freq.reduce((a, b) => a + b, 0);
+    let p = kelas[0][1] - kelas[0][0] + 1;
+
+    // FK
+    let fk = [];
+    let temp = 0;
+
+    for (let f of freq) {
+        temp += f;
+        fk.push(temp);
+    }
+
+    let hasil = "";
+
+    // DIKETAHUI
+    hasil += "=== DIKETAHUI ===\n\n";
+
+    for (let i = 0; i < n; i++) {
+        hasil += `Kelas ${i+1}: ${kelas[i][0]}-${kelas[i][1]} | f = ${freq[i]} | fk = ${fk[i]}\n`;
+    }
+
+    hasil += `\nN = ${total_f}\n`;
+    hasil += `p = ${p}\n\n`;
+
+    // MEAN
+    if (pilihan == "1") {
+        let total_fx = 0;
+        for (let i = 0; i < n; i++) {
+            let xi = (kelas[i][0] + kelas[i][1]) / 2;
+            total_fx += xi * freq[i];
+        }
+        hasil += "=== HASIL ===\nMean = " + total_fx / total_f;
+    }
+
+    // MEDIAN
+    else if (pilihan == "2") {
+        let posisi = total_f / 2;
+        let i = fk.findIndex(x => x >= posisi);
+
+        let tb = kelas[i][0] - 0.5;
+        let f = freq[i];
+        let fk_sebelum = i == 0 ? 0 : fk[i - 1];
+
+        let median = tb + ((posisi - fk_sebelum) / f) * p;
+
+        hasil += "=== HASIL ===\nMedian = " + median;
+    }
+
+    // MODUS
+    else if (pilihan == "3") {
+        let max = Math.max(...freq);
+        let i = freq.indexOf(max);
+
+        let tb = kelas[i][0] - 0.5;
+        let f0 = i > 0 ? freq[i - 1] : 0;
+        let f2 = i < n - 1 ? freq[i + 1] : 0;
+
+        let d1 = max - f0;
+        let d2 = max - f2;
+
+        let modus = tb + (d1 / (d1 + d2)) * p;
+
+        hasil += "=== HASIL ===\nModus = " + modus;
+    }
+
+    // Q1
+    else if (pilihan == "4") {
+        let posisi = total_f / 4;
+        let i = fk.findIndex(x => x >= posisi);
+
+        let tb = kelas[i][0] - 0.5;
+        let f = freq[i];
+        let fk_sebelum = i == 0 ? 0 : fk[i - 1];
+
+        let q1 = tb + ((posisi - fk_sebelum) / f) * p;
+
+        hasil += "=== HASIL ===\nQ1 = " + q1;
+    }
+
+    // Q3
+    else if (pilihan == "5") {
+        let posisi = (3 * total_f) / 4;
+        let i = fk.findIndex(x => x >= posisi);
+
+        let tb = kelas[i][0] - 0.5;
+        let f = freq[i];
+        let fk_sebelum = i == 0 ? 0 : fk[i - 1];
+
+        let q3 = tb + ((posisi - fk_sebelum) / f) * p;
+
+        hasil += "=== HASIL ===\nQ3 = " + q3;
+    }
+
+    document.getElementById("hasil").innerText = hasil;
+}
+
+// RESET / PILIH ULANG
+function ulang() {
+    document.getElementById("interval").value = "";
+    document.getElementById("frekuensi").value = "";
+    document.getElementById("pilihan").value = "1";
+    document.getElementById("hasil").innerText = "";
+}
+</script>
+
+</body>
+</html>
