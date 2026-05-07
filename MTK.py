@@ -1,10 +1,4 @@
-# Program Statistik Data Kelompok
-# Mean, Median, Modus, Q1, dan Q3
-
-# =========================
-# INPUT DATA
-# =========================
-
+#INPUT
 interval_input = input(
     "Masukkan interval kelas (contoh: 10-19,20-29,30-39): "
 )
@@ -27,9 +21,7 @@ frekuensi = list(map(int, frekuensi_input.split(",")))
 
 n = len(kelas)
 
-# =========================
-# DIKETAHUI
-# =========================
+#DIKETAHUI
 
 print("\n=== DIKETAHUI ===")
 
@@ -39,7 +31,7 @@ for i in range(n):
 
 print("Frekuensi :", frekuensi)
 
-# Frekuensi kumulatif
+# Frekuensi
 fk_list = []
 fk = 0
 
@@ -49,9 +41,7 @@ for f in frekuensi:
 
 print("Frekuensi Kumulatif (fk) :", fk_list)
 
-# =========================
-# PILIHAN MENU
-# =========================
+#PILIH MENU
 
 print("\n=== PILIH YANG INGIN DICARI ===")
 print("1. Mean")
@@ -62,16 +52,12 @@ print("5. Kuartil Atas (Q3)")
 
 pilihan = input("Masukkan pilihan (1/2/3/4/5): ")
 
-# =========================
-# DATA UMUM
-# =========================
+#DATA UMUM
 
 total_f = sum(frekuensi)
 p = kelas[0][1] - kelas[0][0] + 1
 
-# =========================
-# MEAN
-# =========================
+#MEAN
 
 if pilihan == "1":
 
@@ -96,10 +82,7 @@ if pilihan == "1":
     print("Σfx =", total_fx)
     print("Mean =", mean)
 
-# =========================
-# MEDIAN
-# =========================
-
+#MEDIAN
 elif pilihan == "2":
 
     posisi = total_f / 2
@@ -135,9 +118,7 @@ elif pilihan == "2":
     print("\n=== HASIL ===")
     print("Median =", median)
 
-# =========================
-# MODUS
-# =========================
+#MODUS
 
 elif pilihan == "3":
 
@@ -170,9 +151,7 @@ elif pilihan == "3":
     print("\n=== HASIL ===")
     print("Modus =", modus)
 
-# =========================
-# KUARTIL BAWAH (Q1)
-# =========================
+#Q1
 
 elif pilihan == "4":
 
@@ -209,9 +188,7 @@ elif pilihan == "4":
     print("\n=== HASIL ===")
     print("Kuartil Bawah (Q1) =", q1)
 
-# =========================
-# KUARTIL ATAS (Q3)
-# =========================
+#Q3
 
 elif pilihan == "5":
 
